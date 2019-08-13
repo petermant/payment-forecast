@@ -1,5 +1,5 @@
 Background notes
------
+----------------
 
 SHA-256 - first row with the listed columns from the PDF, without commas, becomes
 KKkhBNSD6pIad48vG4ErlsOGMOVFH8kEGDnt1uM97922750157826880164.40
@@ -47,7 +47,7 @@ It's not immediately obvious how to group this further - so sticking with key en
 
 
 Approach
------
+--------
 
 #####Dataload
 - Code basic entities
@@ -56,3 +56,54 @@ Approach
 - Create grouped queries on the database to extract summary totals per day per Merchant
 - Expose those via DAO using DTO class
 - Create page template for data display using Thymeleaf - which avoids any client-side rendering via REST API's for now
+
+
+DTO classes
+-----------
+Need a matrix of total value of payments per day, where payments after 4pm go into the next day.
+
+- There seems to be no sort order on the front end example, so assume order is not crucial.
+- Some values still to 2d.p. in example, so stick with BigDecimal and format with commas for 1,000's
+- But don't display zeroes if rounds to a pound? Add later...
+- Possible enhancement: Currency ... display as £ for now as all GDP
+
+For now, use a DTO which is a list with one entry for each table row. Each DTO has a date, and a map of each merchant name to their
+amount for that day, calculated within the 4pm bounds.
+
+#####Queries
+
+The following query is a good starting point
+
+```h2
+select hour(DUE_EPOC), trunc(due_epoc) + case hour(DUE_EPOC)>=16 when true then 1 else 0 end as modified_epoc, due_epoc from
+              (
+                select distinct parsedatetime(formatdatetime(due_Epoc, 'yyyy-MM-DD HH:mm'), 'yyyy-MM-DD HH:mm') as due_epoc
+                from payment
+              )
+order by 3 desc;
+```
+
+Either side of 4pm that gives
+
+Hour | modified_epoc | due_epoc |
+| ---|:-------------:| --------:|
+16	|2020-01-**09** 00:00:00.000000000	|2020-01-**08** 16:01:00.000000000|
+16	|2020-01-**09** 00:00:00.000000000	|2020-01-**08** 16:00:00.000000000|
+15	|2020-01-08 00:00:00.000000000	|2020-01-08 15:59:00.000000000|
+15	|2020-01-08 00:00:00.000000000	|2020-01-08 15:58:00.000000000|
+15	|2020-01-08 00:00:00.000000000	|2020-01-08 15:57:00.000000000|
+
+So, final query that gives me what I need uses the same logic above but groups by payer and distinct date:
+
+
+```h2
+select forecast.forecast_collected_day, m.MERCHANT_NAME, sum(forecast.AMOUNT) as daily_amount from
+  (
+    select MERCHANT_ID, amount, formatdatetime(trunc(due_epoc) + case hour(DUE_EPOC)>=16 when true then 1 else 0 end, 'yyyy-MM-DD') as forecast_collected_day
+    from payment
+  ) forecast
+inner join MERCHANT m on m.ID = forecast.MERCHANT_ID
+group by forecast_collected_day, MERCHANT_ID
+```
+
+[technically I probably ought to be looking more closely at how sum(amount) behaves...any loss of precision?]

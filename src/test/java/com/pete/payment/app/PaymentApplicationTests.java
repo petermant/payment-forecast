@@ -8,6 +8,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.ResponseEntity;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -20,6 +21,7 @@ import static org.junit.Assert.assertTrue;
 @RunWith(SpringRunner.class)
 @TestPropertySource("classpath:test.properties")
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
+@ContextConfiguration(classes = WebApplicationTestConfig.class)
 public class PaymentApplicationTests {
 
 	@LocalServerPort

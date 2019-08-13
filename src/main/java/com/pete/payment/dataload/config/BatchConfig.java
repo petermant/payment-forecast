@@ -94,6 +94,7 @@ public class BatchConfig {
                 .build();
     }
 
+    // TODO put this back as splitting the resource into a bean was only for tests, and I found a way around it without doing that...bad idea in first place really
     @Bean
     protected Resource csvResource() {
         return new ClassPathResource(fileName);
