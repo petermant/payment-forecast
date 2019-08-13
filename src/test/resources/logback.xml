@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<configuration>
+
+    <!-- logging for error lines -->
+    <timestamp key="currenttime" datePattern="yyyyMMdd'T'HHmmss"/>
+    <appender name="batch-error-lines" class="ch.qos.logback.core.FileAppender">
+        <file>payment-import-errors-${currenttime}.log</file>
+        <encoder>
+            <pattern>%msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="batch-error-lines" level="ERROR" additivity="false">
+        <appender-ref ref="batch-error-lines" />
+    </logger>
+
+    <!-- general application logging -->
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.springframework" level="INFO"/>
+    <logger name="com.pete" level="DEBUG"/>
+
+    <root level="ERROR">
+        <appender-ref ref="STDOUT" />
+    </root>
+</configuration>
