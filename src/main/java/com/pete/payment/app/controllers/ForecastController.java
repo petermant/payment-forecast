@@ -1,5 +1,6 @@
 package com.pete.payment.app.controllers;
 
+import com.pete.payment.app.data.ForecastSummaryDTO;
 import com.pete.payment.app.services.ForecastService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -16,7 +17,9 @@ public class ForecastController {
 
     @GetMapping("forecast/summary")
     public String forecastSummary(Model model) {
-        model.addAttribute("summary", forecastService.getForecastSummary());
+        ForecastSummaryDTO summary = forecastService.getForecastSummary();
+        model.addAttribute("merchants", summary.getAllMerchantNames());
+        model.addAttribute("dailyEntries", summary.getDailyEntries().values());
         return "forecast-summary";
     }
 }

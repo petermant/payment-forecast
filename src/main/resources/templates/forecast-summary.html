@@ -5,6 +5,20 @@
     <title>Forecast summary</title>
 </head>
 <body>
-    <p th:text="${summary}"/>
+    <h1>Forecast summary</h1>
+
+    <table>
+
+        <tr>
+            <th><span>Day</span></th>
+            <th th:each="merchantName: ${merchants}">[[${#strings.replace(merchantName, '_', ' ')}]]</th>
+        </tr>
+
+        <tr th:each="entry: ${dailyEntries}">
+            <td>[[${entry.getForecastDay()}]]</td>
+            <td th:each="merchantName: ${merchants}">[[${entry.getAmountForMerchant(merchantName)}]]</td>
+        </tr>
+
+    </table>
 </body>
 </html>

@@ -44,10 +44,26 @@ public class PaymentApplicationTests {
 	}
 
 	@Test
-	public void forecastSummaryShouldContainPlaceholderText() {
+	public void forecastSummaryShouldContainTemplateText() {
 		ResponseEntity<String> response = template.getForEntity(base.toString(), String.class);
 		assertNotNull(response.getBody());
-		assertTrue(response.getBody().contains("forecast summary results here"));
+		assertTrue(response.getBody().contains("<title>Forecast summary</title>"));
+	}
+
+	@Test
+	public void forecastSummaryShouldContainHeaderCellWithBritishGasInWithoutUnderscores() {
+		ResponseEntity<String> response = template.getForEntity(base.toString(), String.class);
+		final String body = response.getBody();
+		assertNotNull(body);
+		assertTrue(body.contains("<th>British Gas</th>"));
+	}
+
+	@Test
+	public void forecastSummaryShouldContainRightAmountForBritishGas() {
+		ResponseEntity<String> response = template.getForEntity(base.toString(), String.class);
+		final String body = response.getBody();
+		assertNotNull(body);
+		assertTrue(body.contains("<td>1064.50</td>"));
 	}
 
 }
