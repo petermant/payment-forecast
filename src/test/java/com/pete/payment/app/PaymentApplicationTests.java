@@ -19,6 +19,7 @@ import static org.junit.Assert.assertEquals;
 @TestPropertySource("classpath:test.properties")
 @SpringBootTest(webEnvironment= SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class PaymentApplicationTests {
+
 	@LocalServerPort
 	private int port;
 
@@ -29,11 +30,11 @@ public class PaymentApplicationTests {
 
 	@Before
 	public void beforePaymentApplicationTests() throws Exception {
-		this.base = new URL("http://localhost:" + port + "/forecast-summary");
+		this.base = new URL("http://localhost:" + port + "/forecast/summary");
 	}
 
 	@Test
-	public void forecastSummaryShouldReturnOK() throws Exception {
+	public void forecastSummaryShouldReturnOK() {
 		ResponseEntity<String> response = template.getForEntity(base.toString(), String.class);
 		assertEquals(200, response.getStatusCode().value());
 	}
