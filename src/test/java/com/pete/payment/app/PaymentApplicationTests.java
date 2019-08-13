@@ -14,6 +14,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import java.net.URL;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertTrue;
 
 @RunWith(SpringRunner.class)
 @TestPropertySource("classpath:test.properties")
@@ -37,6 +39,13 @@ public class PaymentApplicationTests {
 	public void forecastSummaryShouldReturnOK() {
 		ResponseEntity<String> response = template.getForEntity(base.toString(), String.class);
 		assertEquals(200, response.getStatusCode().value());
+	}
+
+	@Test
+	public void forecastSummaryShouldContainPlaceholderText() {
+		ResponseEntity<String> response = template.getForEntity(base.toString(), String.class);
+		assertNotNull(response.getBody());
+		assertTrue(response.getBody().contains("forecast summary results here"));
 	}
 
 }
