@@ -6,6 +6,9 @@ target/
 .attach_pid*
 .mvn/
 
+payments-db.mv.db
+*.log
+
 ### STS ###
 .apt_generated
 .classpath
