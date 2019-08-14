@@ -5,7 +5,7 @@
         <!-- logging for error lines -->
         <timestamp key="currenttime" datePattern="yyyyMMdd'T'HHmmss"/>
         <appender name="batch-error-lines" class="ch.qos.logback.core.FileAppender">
-            <file>payment-import-errors-${currenttime}.log</file>
+            <file>logs/payment-import-errors-${currenttime}.log</file>
             <encoder>
                 <pattern>%msg%n</pattern>
             </encoder>
@@ -16,7 +16,7 @@
         </logger>
 
         <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-            <file>dataload.log</file>
+            <file>logs/dataload.log</file>
             <encoder>
                 <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
             </encoder>
@@ -25,7 +25,7 @@
 
     <springProfile name="default">
         <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-            <file>webapp.log</file>
+            <file>logs/webapp.log</file>
             <encoder>
                 <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
             </encoder>

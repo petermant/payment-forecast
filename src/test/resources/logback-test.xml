@@ -6,7 +6,7 @@
         <!-- logging for error lines -->
         <timestamp key="currenttime" datePattern="yyyyMMdd'T'HHmmss"/>
         <appender name="batch-error-lines" class="ch.qos.logback.core.FileAppender">
-            <file>payment-import-errors-${currenttime}.log</file>
+            <file>logs/payment-import-errors-${currenttime}.log</file>
             <encoder>
                 <pattern>%msg%n</pattern>
             </encoder>
