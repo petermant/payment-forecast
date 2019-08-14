@@ -48,8 +48,8 @@ public class SummaryDAO {
         } catch (SQLException e) {
             logger.error("Unable to retrieve summary results due to SQL exception", e);
 
-            // TODO wire up exception handling with server error response
-            return null;
+            // this should result in a 500 error in spring boot
+            throw new RuntimeException(e);
         }
     }
 
