@@ -63,7 +63,7 @@ public class PaymentApplicationTests {
 		ResponseEntity<String> response = template.getForEntity(base.toString(), String.class);
 		final String body = response.getBody();
 		assertNotNull(body);
-		assertTrue(body.contains("<td>1064.50</td>"));
+		assertTrue(body.contains("<td>£1,064.50</td>"));
 	}
 
 }
