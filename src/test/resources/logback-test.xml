@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <configuration>
 
+    <!-- generally in test, don't want this section to activate - but have left it here in case useful to restore spring profile on case-by-case basis -->
     <springProfile name="dataload">
         <!-- logging for error lines -->
         <timestamp key="currenttime" datePattern="yyyyMMdd'T'HHmmss"/>
@@ -14,22 +15,6 @@
         <logger name="batch-error-lines" level="ERROR" additivity="false">
             <appender-ref ref="batch-error-lines" />
         </logger>
-
-        <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-            <file>dataload.log</file>
-            <encoder>
-                <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-            </encoder>
-        </appender>
-    </springProfile>
-
-    <springProfile name="default">
-        <appender name="FILE" class="ch.qos.logback.core.FileAppender">
-            <file>webapp.log</file>
-            <encoder>
-                <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
-            </encoder>
-        </appender>
     </springProfile>
 
     <!-- general application logging -->
@@ -39,12 +24,10 @@
         </encoder>
     </appender>
 
-
     <logger name="org.springframework" level="INFO"/>
-    <logger name="com.pete" level="INFO"/>
+    <logger name="com.pete" level="DEBUG"/>
 
     <root level="ERROR">
         <appender-ref ref="STDOUT" />
-        <appender-ref ref="FILE" />
     </root>
 </configuration>

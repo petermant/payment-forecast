@@ -8,7 +8,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 public class DataLoader {
 
 	public static void main(String[] args) {
-		new SpringApplicationBuilder(DataLoader.class).web(WebApplicationType.NONE).application().run(args);
+		new SpringApplicationBuilder(DataLoader.class).profiles("dataload").web(WebApplicationType.NONE).application().run(args);
 	}
 
 }
