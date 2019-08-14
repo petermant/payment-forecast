@@ -9,7 +9,7 @@ import java.math.BigDecimal;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Component
 public class SummaryDAO {
@@ -55,7 +55,7 @@ public class SummaryDAO {
 
     private void addEntry(ForecastSummaryDTO results, ResultSet rs) throws SQLException {
         String merchantName = rs.getString("merchant_name");
-        Date forecastCollectedDay = rs.getDate("forecast_collected_day");
+        LocalDateTime forecastCollectedDay = rs.getObject("forecast_collected_day", LocalDateTime.class);
         BigDecimal amount = rs.getBigDecimal("daily_amount");
 
         results.setMerchantDailyEntry(merchantName, forecastCollectedDay, amount);

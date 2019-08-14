@@ -10,7 +10,8 @@ import org.springframework.batch.item.ItemProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 @Component
 public class PaymentLineProcessor implements ItemProcessor<PaymentLine, Payment> {
@@ -42,7 +43,7 @@ public class PaymentLineProcessor implements ItemProcessor<PaymentLine, Payment>
 
         payment.setReceivedUTC(row.getReceivedUTC());
         payment.setDebitPermissionId(row.getDebitPermissionId());
-        payment.setDueEpoc(new Date(row.getDueEpoc()*1000));
+        payment.setDueEpoc(LocalDateTime.ofEpochSecond(row.getDueEpoc(), 0, ZoneOffset.UTC));
         payment.setCurrency(row.getCurrency());
         payment.setAmount(row.getAmount());
 

@@ -28,6 +28,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.math.BigDecimal;
+import java.time.ZoneOffset;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -83,7 +84,7 @@ public class BatchReadingTests {
 
         Payment resultEntry = results.get(0);
 
-        assertEquals("2020-01-03 10:48:11.0", resultEntry.getReceivedUTC().toString());
+        assertEquals("2020-01-03T10:48:11", resultEntry.getReceivedUTC().toString());
 
         assertEquals(1, resultEntry.getMerchant().getId().intValue());
         assertEquals("Sky", resultEntry.getMerchant().getMerchantName());
@@ -98,7 +99,7 @@ public class BatchReadingTests {
         //assertEquals("2020-01-06T00:00:01", resultEntry.getDueUTC());
 
         // This is the same as the input but with the additional three zeroes as Java dates store epoc in millis not seconds as per the input file
-        assertEquals(1578268801000L, resultEntry.getDueEpoc().getTime());
+        assertEquals(1578268801, resultEntry.getDueEpoc().toEpochSecond(ZoneOffset.UTC));
         assertEquals("GBP", resultEntry.getCurrency().toString());
         assertEquals(new BigDecimal("64.40"), resultEntry.getAmount());
     }

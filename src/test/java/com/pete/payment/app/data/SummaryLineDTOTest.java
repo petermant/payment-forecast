@@ -4,9 +4,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class SummaryLineDTOTest {
 
@@ -14,7 +16,7 @@ public class SummaryLineDTOTest {
 
     @Before
     public void beforePayeeSummaryDTOTest() {
-        payeeSummaryDTO = new SummaryLineDTO(new Date());
+        payeeSummaryDTO = new SummaryLineDTO(LocalDateTime.now(ZoneOffset.UTC));
         payeeSummaryDTO.setAmountForMerchant("merchantname", BigDecimal.TEN);
     }
 

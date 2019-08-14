@@ -4,21 +4,19 @@ import org.junit.Before;
 import org.junit.Test;
 
 import java.math.BigDecimal;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.Map;
-import java.util.SortedSet;
-import java.util.TreeSet;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 public class ForecastSummaryDTOTest {
 
     private ForecastSummaryDTO forecastSummaryDTO;
 
-    private Date d1 = new Date();
-    private Date d2 = new Date(d1.getTime()+100000);
+    private LocalDateTime d1 = LocalDateTime.now(ZoneOffset.UTC);
+    private LocalDateTime d2 = d1.plusDays(1);
 
     @Before
     public void beforeForecastSummaryDTOTest() {
@@ -37,7 +35,7 @@ public class ForecastSummaryDTOTest {
 
     @Test
     public void getDailyEntries() {
-        final Map<Date, SummaryLineDTO> dailyEntries = forecastSummaryDTO.getDailyEntries();
+        final Map<LocalDateTime, SummaryLineDTO> dailyEntries = forecastSummaryDTO.getDailyEntries();
 
         assertEquals(2, dailyEntries.size());
 

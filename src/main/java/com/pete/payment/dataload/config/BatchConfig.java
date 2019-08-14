@@ -39,8 +39,10 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Collections;
-import java.util.Date;
+
+import static java.time.format.DateTimeFormatter.ISO_OFFSET_DATE_TIME;
 
 @Configuration
 @EnableBatchProcessing
@@ -59,14 +61,6 @@ public class BatchConfig {
 
     @Value("${input-filename:payment-forecast-data.csv}")
     private String fileName;
-
-    // e.g. 2020-01-06T00:00:01Z
-    private static SimpleDateFormat DATE_FORMAT;
-
-    static {
-        DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        DATE_FORMAT.setLenient(false);
-    }
 
     @Bean
     protected ResourcelessTransactionManager resourcelessTransactionManager() {
@@ -94,21 +88,15 @@ public class BatchConfig {
                 .build();
     }
 
-    // TODO put this back as splitting the resource into a bean was only for tests, and I found a way around it without doing that...bad idea in first place really
     @Bean
-    protected Resource csvResource() {
-        return new ClassPathResource(fileName);
-    }
-
-    @Bean
-    protected FlatFileItemReader<PaymentLine> reader(LineTokenizer lineTokenizer, FieldSetMapper<PaymentLine> fieldSetMapper, Resource csvResource) {
+    protected FlatFileItemReader<PaymentLine> reader(LineTokenizer lineTokenizer, FieldSetMapper<PaymentLine> fieldSetMapper) {
         FlatFileItemReader<PaymentLine> reader = new FlatFileItemReaderBuilder<PaymentLine>()
                 .lineTokenizer(lineTokenizer)
                 .fieldSetMapper(fieldSetMapper)
                 .name("PaymentLineReader")
                 .build();
 
-        reader.setResource(csvResource);
+        reader.setResource(new ClassPathResource(fileName));
         reader.setLinesToSkip(1);
 
         return reader;
@@ -125,7 +113,7 @@ public class BatchConfig {
     protected FieldSetMapper<PaymentLine> fieldSetMapper() {
         BeanWrapperFieldSetMapper<PaymentLine> mapper = new BeanWrapperFieldSetMapper<>();
         mapper.setTargetType(PaymentLine.class);
-        mapper.setCustomEditors(Collections.singletonMap(Date.class, new CustomDateEditor(DATE_FORMAT, false)));
+        mapper.setCustomEditors(Collections.singletonMap(LocalDateTime.class, new CustomLocalDateTimeEditor(ISO_OFFSET_DATE_TIME)));
         return mapper;
     }
 

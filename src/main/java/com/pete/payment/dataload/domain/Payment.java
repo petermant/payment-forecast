@@ -11,7 +11,7 @@ import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
@@ -31,7 +31,7 @@ public class Payment {
 
     @Column
     @NotNull
-    private Date receivedUTC;
+    private LocalDateTime receivedUTC;
 
     @Column
     @NotNull
@@ -39,7 +39,7 @@ public class Payment {
 
     @Column
     @NotNull
-    private Date dueEpoc;
+    private LocalDateTime dueEpoc;
 
     @Column
     @NotNull
@@ -73,11 +73,11 @@ public class Payment {
         this.payer = payer;
     }
 
-    public Date getReceivedUTC() {
+    public LocalDateTime getReceivedUTC() {
         return receivedUTC;
     }
 
-    public void setReceivedUTC(Date receivedUTC) {
+    public void setReceivedUTC(LocalDateTime receivedUTC) {
         this.receivedUTC = receivedUTC;
     }
 
@@ -89,11 +89,11 @@ public class Payment {
         this.debitPermissionId = debitPermissionId;
     }
 
-    public Date getDueEpoc() {
+    public LocalDateTime getDueEpoc() {
         return dueEpoc;
     }
 
-    public void setDueEpoc(Date dueEpoc) {
+    public void setDueEpoc(LocalDateTime dueEpoc) {
         this.dueEpoc = dueEpoc;
     }
 

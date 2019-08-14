@@ -4,16 +4,12 @@ import com.pete.payment.app.WebApplicationTestConfig;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.context.support.DirtiesContextTestExecutionListener;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -36,8 +32,8 @@ public class SummaryDAOTest {
     public void getSummaryResultsPutsPayerThreeAmountIntoTheNextDay() {
         ForecastSummaryDTO dto = summaryDao.getSummaryResults();
 
-        // 1578441600000 is 2020-01-08
-        SummaryLineDTO entryFor8th = dto.getDailyEntries().get(new Date(1578441600000L));
+        // 1578441600 is 2020-01-08
+        SummaryLineDTO entryFor8th = dto.getDailyEntries().get(LocalDateTime.ofEpochSecond(1578441600, 0, ZoneOffset.UTC));
         assertEquals(new BigDecimal("91000.00"), entryFor8th.getAmountForMerchant("British_Gas"));
     }
 
@@ -49,7 +45,7 @@ public class SummaryDAOTest {
         ForecastSummaryDTO dto = summaryDao.getSummaryResults();
 
         // 1578355200000L is 2020-01-07
-        final SummaryLineDTO entryFor7th = dto.getDailyEntries().get(new Date(1578355200000L));
+        final SummaryLineDTO entryFor7th = dto.getDailyEntries().get(LocalDateTime.ofEpochSecond(1578355200, 0, ZoneOffset.UTC));
 
         assertEquals(expectedValue, entryFor7th.getAmountForMerchant("British_Gas"));
     }

@@ -8,6 +8,8 @@ import org.springframework.batch.item.validator.ValidationException;
 import org.springframework.batch.item.validator.Validator;
 import org.springframework.stereotype.Component;
 
+import java.time.ZoneOffset;
+
 @Component
 public class RowValidator implements Validator<PaymentLine> {
     static final String BAD_SHA = "Calculated SHA value did not match SHA value in input file";
@@ -23,7 +25,7 @@ public class RowValidator implements Validator<PaymentLine> {
             throw new ValidationException(DUE_EPOC_ABSENT);
         } else if (row.getDueUTC() == null) {
             throw new ValidationException(DUE_UTC_ABSENT);
-        } else if (!row.getDueEpoc().equals(row.getDueUTC().getTime()/1000)) {
+        } else if (!row.getDueEpoc().equals(row.getDueUTC().toEpochSecond(ZoneOffset.UTC))) {
             throw new ValidationException(DUE_DATES_DIFFERENT);
         } else if (!calculatedSHA(row).equals(row.getSHA256())) {
             throw new ValidationException(BAD_SHA);

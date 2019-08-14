@@ -4,18 +4,18 @@ import org.springframework.batch.item.ItemCountAware;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 public class PaymentLine implements ItemCountAware {
 
-    private Date receivedUTC;
+    private LocalDateTime receivedUTC;
     private BigInteger merchantID;
     private String merchantName;
     private String merchantPubKey;
     private BigInteger payerID;
     private String payerPubKey;
     private BigInteger debitPermissionId;
-    private Date dueUTC;
+    private LocalDateTime dueUTC;
     private Long dueEpoc;
     private Currency currency;
     private BigDecimal amount;
@@ -23,11 +23,11 @@ public class PaymentLine implements ItemCountAware {
     private String SHA256;
     private int itemCount;
 
-    public Date getReceivedUTC() {
+    public LocalDateTime getReceivedUTC() {
         return receivedUTC;
     }
 
-    public void setReceivedUTC(Date receivedUTC) {
+    public void setReceivedUTC(LocalDateTime receivedUTC) {
         this.receivedUTC = receivedUTC;
     }
 
@@ -79,11 +79,11 @@ public class PaymentLine implements ItemCountAware {
         this.debitPermissionId = debitPermissionId;
     }
 
-    public Date getDueUTC() {
+    public LocalDateTime getDueUTC() {
         return dueUTC;
     }
 
-    public void setDueUTC(Date dueUTC) {
+    public void setDueUTC(LocalDateTime dueUTC) {
         this.dueUTC = dueUTC;
     }
 

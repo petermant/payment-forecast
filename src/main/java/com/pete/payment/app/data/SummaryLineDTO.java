@@ -1,21 +1,21 @@
 package com.pete.payment.app.data;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.Map;
 
 public class SummaryLineDTO {
 
-    private Date forecastDay;
+    private LocalDateTime forecastDay;
 
     private Map<String, BigDecimal> amountPerMerchant = new HashMap<>();
 
-    public SummaryLineDTO(Date forecastDay) {
+    public SummaryLineDTO(LocalDateTime forecastDay) {
         this.forecastDay = forecastDay;
     }
 
-    public Date getForecastDay() {
+    public LocalDateTime getForecastDay() {
         return forecastDay;
     }
 

@@ -6,7 +6,8 @@ import org.springframework.batch.item.validator.ValidationException;
 
 import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.util.Date;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
@@ -14,8 +15,6 @@ import static org.junit.Assert.assertNull;
 public class RowValidatorTest {
 
     private RowValidator validator = new RowValidator();
-
-    // don't need a test to validate that all fields are filled in, as the Jackson reader already guarantees that
 
     @Test
     public void shouldValidateDueDatesWithoutNPE() {
@@ -28,14 +27,14 @@ public class RowValidatorTest {
         }
         assertEquals(RowValidator.DUE_EPOC_ABSENT, message1);
 
-        rowWithBadDueDates.setDueEpoc(new Date().getTime()/1000);
+        rowWithBadDueDates.setDueEpoc(LocalDateTime.now(ZoneOffset.UTC).toEpochSecond(ZoneOffset.UTC));
         try {
             validator.validate(rowWithBadDueDates);
         } catch (ValidationException e) {
             message2 = e.getMessage();
         }
         assertEquals(RowValidator.DUE_UTC_ABSENT, message2);
-        rowWithBadDueDates.setDueUTC(new Date(rowWithBadDueDates.getDueEpoc()));
+        rowWithBadDueDates.setDueUTC(LocalDateTime.ofEpochSecond(rowWithBadDueDates.getDueEpoc(), 0, ZoneOffset.UTC).plusDays(1));
         try {
             validator.validate(rowWithBadDueDates);
         } catch (ValidationException e) {
@@ -47,8 +46,8 @@ public class RowValidatorTest {
     @Test
     public void shouldValidateThatDueUTCMatchesDueEPOC() {
         PaymentLine rowWithBadDueDates = new PaymentLine();
-        rowWithBadDueDates.setDueEpoc(new Date().getTime()/1000);
-        rowWithBadDueDates.setDueUTC(new Date(10));
+        rowWithBadDueDates.setDueEpoc(LocalDateTime.now(ZoneOffset.UTC).toEpochSecond(ZoneOffset.UTC));
+        rowWithBadDueDates.setDueUTC(LocalDateTime.now(ZoneOffset.UTC).plusDays(2));
         String message = "";
         try {
             validator.validate(rowWithBadDueDates);
@@ -62,7 +61,7 @@ public class RowValidatorTest {
     public void shouldValidateThatSHA256IsCorrect() {
         PaymentLine row = new PaymentLine();
         row.setDueEpoc(1578268801L); // 2020-01-06T00:00:01Z
-        row.setDueUTC(new Date(row.getDueEpoc()*1000));
+        row.setDueUTC(LocalDateTime.ofEpochSecond(row.getDueEpoc(), 0, ZoneOffset.UTC));
         row.setMerchantPubKey("");
         row.setAmount(BigDecimal.ONE);
         row.setDebitPermissionId(BigInteger.ONE);
@@ -81,8 +80,8 @@ public class RowValidatorTest {
     @Test
     public void shouldReturnMessageWhenSHAIsIncorrect() {
         PaymentLine rowWithBadSHA = new PaymentLine();
-        rowWithBadSHA.setDueEpoc(new Date().getTime()/1000);
-        rowWithBadSHA.setDueUTC(new Date(rowWithBadSHA.getDueEpoc()*1000));
+        rowWithBadSHA.setDueEpoc(LocalDateTime.now(ZoneOffset.UTC).toEpochSecond(ZoneOffset.UTC));
+        rowWithBadSHA.setDueUTC(LocalDateTime.ofEpochSecond(rowWithBadSHA.getDueEpoc(), 0, ZoneOffset.UTC));
         rowWithBadSHA.setPayerPubKey("hello");
         rowWithBadSHA.setSHA256("not a sha");
         String message = "";
@@ -108,7 +107,7 @@ public class RowValidatorTest {
         firstRowFromTestFile.setDebitPermissionId(BigInteger.valueOf(7922750));
         firstRowFromTestFile.setDueEpoc(1578268801L);
         firstRowFromTestFile.setAmount(new BigDecimal("64.40"));
-        firstRowFromTestFile.setDueUTC(new Date(firstRowFromTestFile.getDueEpoc()*1000)); // avoids date equality validation error
+        firstRowFromTestFile.setDueUTC(LocalDateTime.ofEpochSecond(firstRowFromTestFile.getDueEpoc(), 0, ZoneOffset.UTC)); // avoids date equality validation error
 
         String message = null;
         try {
