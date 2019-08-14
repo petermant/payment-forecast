@@ -1,3 +1,21 @@
+Running the app
+----------------
+
+Scripts have been provided for linux:
+
+- [dataload](scripts/runDataLoad.sh)
+- [webapp](scripts/runWebapp.sh)
+
+These contain basic maven build commands then run either the dataload or the webapp as a jar file with a parameter to pick which app to run.
+
+The dataload saves all data into a database file called payments-db.mv.db (an H2 database). This same database is then used by the webapp, so
+the webapp will generate errors if dataload is not run first. Equally, running the dataload twice will mean that the spring batch job thinks
+it's already been run, so delete the DB by hand if you wish to run the dataload multiple times.
+
+Logs are stored in the logs folder, as follows:
+- The dataload produces two: dataload.log with application output, and payment-import-errors-<datetime>.log with details of any validation errors.
+- The web app also has two of interest. Firstly, logs/webapp.log, and - because tomcat is moved - tomcat/logs/access<date>.log
+
 Background notes
 ----------------
 
@@ -49,10 +67,10 @@ It's not immediately obvious how to group this further - so sticking with key en
 Approach
 --------
 
-#####Dataload
+##### Dataload
 - Code basic entities
 - Create Spring Batch setup for processing entities, and add tests
-#####Page display
+##### Page display
 - Create grouped queries on the database to extract summary totals per day per Merchant
 - Expose those via DAO using DTO class
 - Create page template for data display using Thymeleaf - which avoids any client-side rendering via REST API's for now
@@ -70,7 +88,7 @@ Need a matrix of total value of payments per day, where payments after 4pm go in
 For now, use a DTO which is a list with one entry for each table row. Each DTO has a date, and a map of each merchant name to their
 amount for that day, calculated within the 4pm bounds.
 
-#####Queries
+##### Queries
 
 The following query is a good starting point
 
