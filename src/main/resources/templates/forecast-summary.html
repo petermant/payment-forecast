@@ -3,20 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <title>Forecast summary</title>
+    <link rel="stylesheet" type="text/css" href="/style.css">
 </head>
 <body>
     <h1>Forecast summary</h1>
 
-    <table>
+    <table cellspacing="0">
 
-        <tr>
-            <th><span>Day</span></th>
+        <tr class="header-row">
+            <th>Day</th>
             <th th:each="merchantName: ${merchants}">[[${#strings.replace(merchantName, '_', ' ')}]]</th>
         </tr>
 
-        <tr th:each="entry: ${dailyEntries}">
+        <tr th:each="entry: ${dailyEntries}" th:class="${entryStat.odd ? 'table-row-odd' : 'table-row-even'}">
             <td>[[${entry.getForecastDay()}]]</td>
-            <td th:each="merchantName: ${merchants}">[[${entry.getAmountForMerchant(merchantName)}]]</td>
+            <td th:each="merchantName: ${merchants}">£[[${#numbers.formatDecimal(entry.getAmountForMerchant(merchantName), 1, 'COMMA', 2, 'POINT')}]]</td>
         </tr>
 
     </table>

@@ -107,3 +107,10 @@ group by forecast_collected_day, MERCHANT_ID
 ```
 
 [technically I probably ought to be looking more closely at how sum(amount) behaves...any loss of precision?]
+
+
+Performance
+-----
+Currently seems OK
+- Loading up all rows into the DB takes circa 30 seconds
+- Requesting the summary on the web page takes circa 2.5s the first time, thereafter it's circa 20ms as results are cached in the DB.

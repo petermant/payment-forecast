@@ -1,0 +1,29 @@
+body {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+}
+
+table {
+    min-width: 50%;
+    text-align: center;
+    border: 1px solid grey;
+    border-collapse: collapse;
+}
+
+tr.header-row {
+    background-color: cornsilk;
+    border: 1px solid grey;
+}
+
+tr.header-row th {
+    padding: 10px;
+    border: 1px solid grey;
+}
+
+tr.table-row-even {
+    background-color: #f2f2f2;
+    border: 1px solid grey;
+}
+
+td {
+    border: 1px solid grey;
+}
