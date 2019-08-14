@@ -16,7 +16,7 @@
         </tr>
 
         <tr th:each="entry: ${dailyEntries}" th:class="${entryStat.odd ? 'table-row-odd' : 'table-row-even'}">
-            <td>[[${entry.getForecastDay()}]]</td>
+            <td>[[${#temporals.format(entry.getForecastDay(),'EE dd-MM-yyyy')}]]</td>
             <td th:each="merchantName: ${merchants}">£[[${#numbers.formatDecimal(entry.getAmountForMerchant(merchantName), 1, 'COMMA', 2, 'POINT')}]]</td>
         </tr>
 
